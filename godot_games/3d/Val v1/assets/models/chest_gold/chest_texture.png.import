@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://djtk1xkgopvph"
-path="res://.godot/imported/chest_texture.png-484d5965dfd677136a235c1a9dc1cc1b.ctex"
+path="res://.godot/imported/chest_texture.png-cef98bd8eecceba59ea1a2b9360e37ee.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/brackeys_3d_game_assets/import_examples/chest_gold/chest_texture.png"
-dest_files=["res://.godot/imported/chest_texture.png-484d5965dfd677136a235c1a9dc1cc1b.ctex"]
+source_file="res://assets/models/chest_gold/chest_texture.png"
+dest_files=["res://.godot/imported/chest_texture.png-cef98bd8eecceba59ea1a2b9360e37ee.ctex"]
 
 [params]
 
