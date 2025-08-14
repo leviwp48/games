@@ -2,17 +2,20 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djtk1xkgopvph"
-path.s3tc="res://.godot/imported/chest_texture.png-cef98bd8eecceba59ea1a2b9360e37ee.s3tc.ctex"
+uid="uid://cfjxrgm2s0bgm"
+path.s3tc="res://.godot/imported/barrel_texture.png-142fff6ee8c35d0fd248046b4d3f64a0.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
+generator_parameters={
+"md5": "33c924802a36c4f3415e10bb6940e832"
+}
 
 [deps]
 
-source_file="res://assets/models/chest_gold/chest_texture.png"
-dest_files=["res://.godot/imported/chest_texture.png-cef98bd8eecceba59ea1a2b9360e37ee.s3tc.ctex"]
+source_file="res://assets/models/barrel/barrel_texture.png"
+dest_files=["res://.godot/imported/barrel_texture.png-142fff6ee8c35d0fd248046b4d3f64a0.s3tc.ctex"]
 
 [params]
 

@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://ca51n8alnxo5g"]
 
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="1_0wfyh"]
-[ext_resource type="PackedScene" uid="uid://dqtvu2aasbq8h" path="res://assets/models/chest_gold/chest_gold.glb" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://cobrlis3m5b72" path="res://scenes/chest.tscn" id="2_0wfyh"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -62,5 +62,5 @@ size = Vector3(0.37793, 1.37677, 1)
 [node name="ProtoController" parent="." instance=ExtResource("1_0wfyh")]
 transform = Transform3D(-0.53151, 0, -0.20374, 0, 0.569222, 0, 0.20374, 0, -0.53151, 0.203712, 0.709922, -0.0184551)
 
-[node name="chest_gold2" parent="." instance=ExtResource("2_0wfyh")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.43143, 0.641953, -1.36282)
+[node name="Chest" parent="." instance=ExtResource("2_0wfyh")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.49468, 0.587466, 1.45916)
