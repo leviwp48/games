@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://ca51n8alnxo5g"]
+[gd_scene load_steps=7 format=3 uid="uid://ca51n8alnxo5g"]
 
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="1_0wfyh"]
-[ext_resource type="PackedScene" uid="uid://cobrlis3m5b72" path="res://scenes/chest.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://c1jxbg3aqv3ur" path="res://scenes/chest.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://dfkkekqafd3pk" path="res://scenes/floor_stone.tscn" id="3_sugp2"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ig7tw"]
 sky_horizon_color = Color(0.662243, 0.671743, 0.686743, 1)
@@ -25,10 +26,10 @@ environment = SubResource("Environment_h2yge")
 transform = Transform3D(0.92051, 0.149712, 0.360899, -0.252526, -0.476872, 0.841917, 0.298148, -0.866129, -0.401159, 0, 15.6556, -5.52302)
 shadow_enabled = true
 
-[node name="Floor" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5.06379, 0.141952, 9.51689)
-use_collision = true
-size = Vector3(50.3088, 1, 55.9148)
+[node name="Flooring" type="CSGCombiner3D" parent="."]
+
+[node name="Floor" parent="Flooring" instance=ExtResource("3_sugp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 33.8622, 0, -2.9052)
 
 [node name="CSGCombiner3D" type="CSGCombiner3D" parent="."]
 transform = Transform3D(5.87611, 0, 0, 0, 5.87611, 0, 0, 0, 5.87611, -4.10146, -2.1561, -1.7512)
@@ -60,7 +61,7 @@ operation = 2
 size = Vector3(0.37793, 1.37677, 1)
 
 [node name="ProtoController" parent="." instance=ExtResource("1_0wfyh")]
-transform = Transform3D(-0.53151, 0, -0.20374, 0, 0.569222, 0, 0.20374, 0, -0.53151, 0.203712, 0.709922, -0.0184551)
+transform = Transform3D(-0.53151, 0, -0.20374, 0, 0.569222, 0, 0.20374, 0, -0.53151, 32.9169, 0.981488, -3.40562)
 
 [node name="Chest" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.49468, 0.587466, 1.45916)

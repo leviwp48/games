@@ -1,11 +1,11 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgyc2x8hcvfgj"]
+[gd_scene load_steps=3 format=3 uid="uid://b5nfc71edqqdw"]
 
 [ext_resource type="PackedScene" uid="uid://dxsvmijfd2jb7" path="res://assets/models/building/ceiling.glb" id="1_ji6l1"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gl8kw"]
 size = Vector3(3.96527, 0.752441, 3.93872)
 
-[node name="StaticBody3D" type="StaticBody3D"]
+[node name="Ceiling" type="StaticBody3D"]
 
 [node name="ceiling" parent="." instance=ExtResource("1_ji6l1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.167274, 0, 0.271742)
