@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://224x1tif2nm6" path="res://assets/models/building/floor_stone.glb" id="1_3ve8l"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_5n5kn"]
-size = Vector3(3.94482, 0.153839, 2.85077)
+size = Vector3(3.94482, 0.153839, 3.94492)
 
 [node name="Floor" type="StaticBody3D"]
 
@@ -11,5 +11,5 @@ size = Vector3(3.94482, 0.153839, 2.85077)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.116071, 0, 0.371492)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.101807, -0.0246429, 0.925385)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.101807, -0.0246429, 0.378312)
 shape = SubResource("BoxShape3D_5n5kn")

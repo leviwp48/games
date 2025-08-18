@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://rgkvo8cg24ss"]
+
+[ext_resource type="PackedScene" uid="uid://batsvyjcdkhxg" path="res://assets/models/barrel/barrel.glb" id="1_q36op"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ptqd7"]
+radius = 0.99064
+height = 2.26664
+
+[node name="Barrel" type="StaticBody3D"]
+
+[node name="barrel" parent="." instance=ExtResource("1_q36op")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.141831, 0, -0.0577974)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.153455, 0.973227, 0)
+shape = SubResource("CapsuleShape3D_ptqd7")
