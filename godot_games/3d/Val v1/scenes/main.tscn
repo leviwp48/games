@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://ca51n8alnxo5g"]
+[gd_scene load_steps=15 format=3 uid="uid://ca51n8alnxo5g"]
 
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="1_0wfyh"]
 [ext_resource type="Texture2D" uid="uid://dbye4axgtr7pq" path="res://assets/brackeys_3d_game_assets/sky_background/autumn_field_puresky_4k.hdr" id="1_tipki"]
@@ -10,6 +10,7 @@
 [ext_resource type="PackedScene" uid="uid://rgkvo8cg24ss" path="res://scenes/barrel.tscn" id="6_o6xl0"]
 [ext_resource type="PackedScene" uid="uid://oaw4smfomadc" path="res://scenes/torch.tscn" id="7_85g3d"]
 [ext_resource type="PackedScene" uid="uid://b5nfc71edqqdw" path="res://scenes/ceiling.tscn" id="10_choun"]
+[ext_resource type="PackedScene" uid="uid://b6d0jv1ysvooo" path="res://scenes/bullet.tscn" id="11_ya4ey"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_85g3d"]
 panorama = ExtResource("1_tipki")
@@ -250,3 +251,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 45.5665, 0.0522776, -10.2881)
 
 [node name="Chest" parent="." instance=ExtResource("2_0wfyh")]
 transform = Transform3D(0.99956, 0, -0.0296487, 0, 1, 0, 0.0296487, 0, 0.99956, 42.7263, 0.0522778, -12.1576)
+
+[node name="Bullet" parent="." instance=ExtResource("11_ya4ey")]
+transform = Transform3D(32.2039, 0, 0, 0, 32.2039, 0, 0, 0, 32.2039, 33.5364, 7.80668, -20.1028)

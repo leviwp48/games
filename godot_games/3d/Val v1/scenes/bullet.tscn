@@ -1,13 +1,14 @@
 [gd_scene load_steps=4 format=3 uid="uid://b6d0jv1ysvooo"]
 
 [ext_resource type="PackedScene" uid="uid://bpkil8wslgunk" path="res://assets/models/guns/pistol/bullet.glb" id="1_mkf8s"]
-[ext_resource type="Script" uid="uid://b11us2fmwrm1f" path="res://scenes/bullet.gd" id="1_y25gk"]
+[ext_resource type="Script" uid="uid://b11us2fmwrm1f" path="res://scripts/bullet.gd" id="1_y25gk"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_y25gk"]
 radius = 0.04749
 height = 0.250947
 
-[node name="Bullet" type="Area3D"]
+[node name="Bullet" type="RayCast3D"]
+top_level = true
 script = ExtResource("1_y25gk")
 
 [node name="bullet" parent="." instance=ExtResource("1_mkf8s")]
@@ -16,3 +17,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00836289, 0.00730443, 0.01
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.00155332, 0.999999, 0, -0.999999, 0.00155332, 0, 0, 0.00699195)
 shape = SubResource("CapsuleShape3D_y25gk")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 5.0
+
+[connection signal="timeout" from="Timer" to="." method="cleanup"]
