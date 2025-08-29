@@ -155,12 +155,14 @@ func release_mouse():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 	mouse_captured = false
 
+
 func shoot_bullet():
 	const BULLET_3D = preload("res://scenes/bullet.tscn")
 	var new_bullet = BULLET_3D.instantiate()
 	var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
 	marker.add_child(new_bullet)
 	new_bullet.global_transform = marker.global_transform
+	
 	
 ## Checks if some Input Actions haven't been created.
 ## Disables functionality accordingly.

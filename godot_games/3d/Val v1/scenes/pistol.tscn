@@ -4,7 +4,6 @@
 [ext_resource type="PackedScene" uid="uid://b6d0jv1ysvooo" path="res://scenes/bullet.tscn" id="1_igbvm"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_46jcc"]
-load_path = "res://.godot/imported/Palette -Sharks.png-cb7406967ee0abda63aa4cee0c2b9746.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2801b"]
 resource_name = "GunMetalNewPallete"
@@ -22,7 +21,6 @@ roughness = 0.299213
 texture_filter = 2
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_igbvm"]
-load_path = "res://.godot/imported/DunkelBlauLogo.png-a310eca03e28f854dd1ef787510faad6.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yqv31"]
 resource_name = "DunkelBlau Logo"
@@ -33,7 +31,6 @@ texture_filter = 2
 texture_repeat = false
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_buff3"]
-load_path = "res://.godot/imported/10MM Auto.png-8adef6ce82dcf8d986428068d9868be8.s3tc.ctex"
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b7xat"]
 resource_name = "10mm Auto"
@@ -114,6 +111,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0694344, 0, 0.23481)
 mesh = SubResource("ArrayMesh_1e3ry")
 
 [node name="Marker3D" type="Marker3D" parent="DunkelBlauWeaponsPackExportVersionCube"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.389949, 1.58544)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000638597, 0.389949, 1.58544)
 
 [node name="Bullet" parent="DunkelBlauWeaponsPackExportVersionCube/Marker3D" instance=ExtResource("1_igbvm")]

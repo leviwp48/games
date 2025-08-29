@@ -6,7 +6,7 @@ extends RayCast3D
 var traveled_distance = 0.0
 
 func _physics_process(delta: float) -> void:
-	position += global_basis * Vector3.FORWARD * speed * delta
+	position += global_basis * -Vector3.FORWARD * speed * delta
 	target_position += Vector3.FORWARD * speed * delta
 	force_raycast_update()
 	var collider = get_collider()
@@ -17,4 +17,5 @@ func _physics_process(delta: float) -> void:
 	#if traveled_distance > RANGE:
 		   
 func cleanup() -> void:
+	print('cleaning up')
 	queue_free()
