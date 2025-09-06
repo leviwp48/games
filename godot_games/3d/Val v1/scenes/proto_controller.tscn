@@ -37,6 +37,8 @@ script = ExtResource("2_5hfox")
 [node name="Node3D" parent="Head/Camera3D" instance=ExtResource("2_wr06p")]
 transform = Transform3D(-0.359372, 0, -0.0622681, 0, 0.364726, 0, 0.0622681, 0, -0.359372, 0.331037, -0.232594, -0.228766)
 
-[node name="Timer" type="Timer" parent="."]
+[node name="Shoot_Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Shoot_Timer" to="." method="enable_shoot"]
 
 [editable path="Head/Camera3D/Node3D"]

@@ -52,7 +52,8 @@ var freeflying : bool = false
 ## IMPORTANT REFERENCES
 @onready var head: Node3D = $Head
 @onready var collider: CollisionShape3D = $Collider
-@onready var shoot_timer: Timer = $Timer
+@onready var shoot_timer: Timer = $Shoot_Timer
+
 
 func _ready() -> void:
 	check_input_mappings()
@@ -120,7 +121,8 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 	
 	if Input.is_action_just_pressed("shoot"):
-		shoot_bullet()
+		if shoot_timer.is_stopped():
+			shoot_bullet()
 
 
 ## Rotate us to look around.
@@ -156,12 +158,17 @@ func release_mouse():
 	mouse_captured = false
 
 
+func enable_shoot():
+	shoot_timer.stop()
+	
+	
 func shoot_bullet():
 	const BULLET_3D = preload("res://scenes/bullet.tscn")
 	var new_bullet = BULLET_3D.instantiate()
 	var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
 	marker.add_child(new_bullet)
 	new_bullet.global_transform = marker.global_transform
+	shoot_timer.start()
 	
 	
 ## Checks if some Input Actions haven't been created.

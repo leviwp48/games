@@ -1,6 +1,6 @@
 extends RayCast3D
 
-@export var speed := 4.0
+@export var speed := 40.0
 @export var range := 40.0
 
 var traveled_distance = 0.0
