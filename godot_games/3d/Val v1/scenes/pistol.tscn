@@ -1,6 +1,7 @@
-[gd_scene load_steps=10 format=4 uid="uid://bkxx06uyqv724"]
+[gd_scene load_steps=11 format=4 uid="uid://bkxx06uyqv724"]
 
 [ext_resource type="Script" uid="uid://2rskcuak113f" path="res://scripts/pistol.gd" id="1_buff3"]
+[ext_resource type="Script" uid="uid://cf5byxhefabc7" path="res://scripts/marker_3d.gd" id="2_buff3"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_46jcc"]
 
@@ -111,3 +112,4 @@ mesh = SubResource("ArrayMesh_1e3ry")
 
 [node name="Marker3D" type="Marker3D" parent="DunkelBlauWeaponsPackExportVersionCube"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000638597, 0.389949, 1.58544)
+script = ExtResource("2_buff3")

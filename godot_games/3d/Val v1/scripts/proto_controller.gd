@@ -171,6 +171,7 @@ func shoot_bullet():
 	var new_bullet = BULLET_3D.instantiate()
 	var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
 	marker.add_child(new_bullet)
+	marker.recoil()
 	new_bullet.global_transform = marker.global_transform
 	shoot_timer.start()
 	

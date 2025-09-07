@@ -1,20 +1,15 @@
 extends RayCast3D
 
+@onready var bullet_mark = preload("res://scenes/bullet_mark.tscn")
+
 @export var speed := 40.0
 @export var range := 40.0
 
 var player_node: Node3D
-
-#var is_moving = get_node("./ProtoController").is_moving
 var traveled_distance = 0.0
-
-func _ready():
-	player_node = get_tree().get_first_node_in_group("player") # Assuming player is in "player" group
-	print(player_node.is_waiting)
 	
 	
 func _physics_process(delta: float) -> void:
-	#print(is_moving)
 	position += global_basis * -Vector3.FORWARD * speed * delta
 	target_position += Vector3.FORWARD * speed * delta
 	force_raycast_update()
@@ -22,14 +17,12 @@ func _physics_process(delta: float) -> void:
 	if is_colliding():
 		global_position = get_collision_point()
 		set_physics_process(false)
-	#traveled_distance += SPEED * delta
-	#if traveled_distance > RANGE:
+		
 		   
 func cleanup() -> void:
 	print('cleaning up')
-	#var is_moving = get_root()
-	#.get_node("ProtoController").is_moving
-	#var is_moving = get_node("./ProtoController").is_moving
-	#print(typeof(player_node))
-	#print(is_moving)
+	var b = bullet_mark.instance()
+	b.global_transform = self.global_transform
 	queue_free()
+	
+	
