@@ -15,7 +15,7 @@ height = 1.8
 radius = 0.4
 height = 1.8
 
-[node name="ProtoController" type="CharacterBody3D"]
+[node name="ProtoController" type="CharacterBody3D" groups=["player"]]
 script = ExtResource("1_ucva2")
 
 [node name="Mesh" type="MeshInstance3D" parent="."]
@@ -38,6 +38,7 @@ script = ExtResource("2_5hfox")
 transform = Transform3D(-0.359372, 0, -0.0622681, 0, 0.364726, 0, 0.0622681, 0, -0.359372, 0.331037, -0.232594, -0.228766)
 
 [node name="Shoot_Timer" type="Timer" parent="."]
+wait_time = 0.3
 
 [connection signal="timeout" from="Shoot_Timer" to="." method="enable_shoot"]
 

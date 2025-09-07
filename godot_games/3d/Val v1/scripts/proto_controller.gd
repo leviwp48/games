@@ -48,6 +48,7 @@ var mouse_captured : bool = false
 var look_rotation : Vector2
 var move_speed : float = 0.0
 var freeflying : bool = false
+var is_moving : bool = false
 
 ## IMPORTANT REFERENCES
 @onready var head: Node3D = $Head
@@ -110,12 +111,14 @@ func _physics_process(delta: float) -> void:
 		if move_dir:
 			velocity.x = move_dir.x * move_speed
 			velocity.z = move_dir.z * move_speed
+			is_moving = true
 		else:
 			velocity.x = move_toward(velocity.x, 0, move_speed)
 			velocity.z = move_toward(velocity.z, 0, move_speed)
 	else:
 		velocity.x = 0
 		velocity.y = 0
+		is_moving = false
 	
 	# Use velocity to actually move
 	move_and_slide()
@@ -163,6 +166,7 @@ func enable_shoot():
 	
 	
 func shoot_bullet():
+	print(is_moving)
 	const BULLET_3D = preload("res://scenes/bullet.tscn")
 	var new_bullet = BULLET_3D.instantiate()
 	var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
