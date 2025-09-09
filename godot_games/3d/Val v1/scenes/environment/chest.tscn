@@ -4,7 +4,9 @@
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_sy5e1"]
 
-[node name="Chest" type="StaticBody3D"]
+[node name="Chest" type="StaticBody3D" groups=["environment"]]
+collision_layer = 3
+collision_mask = 3
 
 [node name="chest_gold2" parent="." instance=ExtResource("1_oii8l")]
 

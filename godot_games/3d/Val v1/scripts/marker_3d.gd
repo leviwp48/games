@@ -1,5 +1,9 @@
 extends Marker3D
 
+func reset():
+	transform.basis = Basis() # reset rotation
+	
+	
 func recoil():
 	print('rotating')
 	var rot_x = randf_range(-0.1, 0.1)

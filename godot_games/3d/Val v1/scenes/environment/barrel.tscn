@@ -6,7 +6,9 @@
 radius = 0.99064
 height = 2.26664
 
-[node name="Barrel" type="StaticBody3D"]
+[node name="Barrel" type="StaticBody3D" groups=["environment"]]
+collision_layer = 3
+collision_mask = 3
 
 [node name="barrel" parent="." instance=ExtResource("1_q36op")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.141831, 0, -0.0577974)

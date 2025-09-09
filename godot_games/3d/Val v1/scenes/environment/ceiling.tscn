@@ -5,7 +5,9 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_gl8kw"]
 size = Vector3(3.96527, 0.752441, 3.93872)
 
-[node name="Ceiling" type="StaticBody3D"]
+[node name="Ceiling" type="StaticBody3D" groups=["environment"]]
+collision_layer = 3
+collision_mask = 3
 
 [node name="ceiling" parent="." instance=ExtResource("1_ji6l1")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.167274, 0, 0.271742)

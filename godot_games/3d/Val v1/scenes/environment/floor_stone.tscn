@@ -5,9 +5,11 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_5n5kn"]
 size = Vector3(3.94482, 0.153839, 3.94492)
 
-[node name="Floor" type="StaticBody3D"]
+[node name="Floor" type="StaticBody3D" groups=["environment"]]
+collision_layer = 3
+collision_mask = 3
 
-[node name="floor_stone" parent="." instance=ExtResource("1_3ve8l")]
+[node name="floor_stone" parent="." groups=["environment"] instance=ExtResource("1_3ve8l")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.116071, 0, 0.371492)
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]

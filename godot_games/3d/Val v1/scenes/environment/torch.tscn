@@ -6,7 +6,9 @@
 radius = 0.377219
 height = 1.17372
 
-[node name="Torch" type="StaticBody3D"]
+[node name="Torch" type="StaticBody3D" groups=["environment"]]
+collision_layer = 3
+collision_mask = 3
 
 [node name="torch_mounted2" parent="." instance=ExtResource("1_d4v33")]
 

@@ -5,7 +5,9 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_787ka"]
 size = Vector3(4.04535, 4.51855, 1)
 
-[node name="WallDoorway" type="StaticBody3D"]
+[node name="WallDoorway" type="StaticBody3D" groups=["environment"]]
+collision_layer = 3
+collision_mask = 3
 
 [node name="wall_doorway2" parent="." instance=ExtResource("1_vvqjt")]
 

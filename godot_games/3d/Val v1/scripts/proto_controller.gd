@@ -55,6 +55,10 @@ var is_moving : bool = false
 @onready var collider: CollisionShape3D = $Collider
 @onready var shoot_timer: Timer = $Shoot_Timer
 
+@onready var bullet = preload("res://scenes/bullet.tscn")
+var new_bullet
+@onready var bullet_hole = preload("res://scenes/bullet_hole.tscn")
+@onready var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
 
 func _ready() -> void:
 	check_input_mappings()
@@ -115,6 +119,7 @@ func _physics_process(delta: float) -> void:
 		else:
 			velocity.x = move_toward(velocity.x, 0, move_speed)
 			velocity.z = move_toward(velocity.z, 0, move_speed)
+			is_moving = false
 	else:
 		velocity.x = 0
 		velocity.y = 0
@@ -164,16 +169,45 @@ func release_mouse():
 func enable_shoot():
 	shoot_timer.stop()
 	
+
+#func test_decal(transform):
+	##const bullet_mark = preload("res://scenes/test.tscn")
+	##var b = bullet_mark.instantiate()
+	##var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
+	##marker.add_child(b)
+	#get_tree().root.add_child(b)
+	#print_tree_pretty()
+	#b.global_transform = transform
+	
 	
 func shoot_bullet():
 	print(is_moving)
-	const BULLET_3D = preload("res://scenes/bullet.tscn")
-	var new_bullet = BULLET_3D.instantiate()
-	var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
+	new_bullet = bullet.instantiate()
 	marker.add_child(new_bullet)
-	marker.recoil()
+	if is_moving:
+		marker.recoil()	
+	else:
+		marker.reset()
 	new_bullet.global_transform = marker.global_transform
 	shoot_timer.start()
+  # In the receiving node's script
+	#var emitting_node = get_node("../Path/To/EmittingNode") # Adjust path as needed
+	if new_bullet:
+		new_bullet.hit_object.connect(_create_bullet_hole)
+	#func on_custom_signal_received(arg1, arg2):
+		## Handle the signal here
+		#print("Signal received with arguments: ", arg1, ", ", arg2)
+	#test_decal(new_bullet.global_transform)
+	
+
+func _create_bullet_hole(collision_position: Vector3, collision_normal: Vector3) -> void:
+	print('here')
+	var b = bullet_hole.instantiate()
+	get_tree().root.add_child(b)
+	#print_tree_pretty()
+	b.global_position = collision_position
+	#print(b.global_position)
+	b.look_at(collision_position + collision_normal, Vector3.UP)
 	
 	
 ## Checks if some Input Actions haven't been created.
