@@ -1,0 +1,100 @@
+[gd_scene load_steps=9 format=3 uid="uid://bs72ogkvdd7d6"]
+
+[ext_resource type="Script" uid="uid://dtupiceygufcq" path="res://scripts/player.gd" id="1_dqkch"]
+[ext_resource type="Script" uid="uid://2rskcuak113f" path="res://scripts/pistol.gd" id="2_qlg0r"]
+[ext_resource type="PackedScene" uid="uid://bkxx06uyqv724" path="res://scenes/pistol.tscn" id="3_tuyoq"]
+[ext_resource type="Script" uid="uid://dxpn8x626n7e0" path="res://scripts/reticle.gd" id="4_fjrip"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
+albedo_color = Color(0.91806, 0.575202, 0.222449, 1)
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_ucva2"]
+radius = 0.4
+height = 1.8
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_iof21"]
+radius = 0.4
+height = 1.465
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dqkch"]
+radius = 0.46
+height = 0.92
+
+[node name="ProtoController" type="CharacterBody3D" groups=["player"]]
+transform = Transform3D(0.722908, 0, 0, 0, 0.722908, 0, 0, 0, 0.722908, -0.0170026, 0.113155, 0.0230596)
+collision_mask = 3
+script = ExtResource("1_dqkch")
+
+[node name="Mesh" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+material_override = SubResource("StandardMaterial3D_iof21")
+cast_shadow = 0
+mesh = SubResource("CapsuleMesh_ucva2")
+
+[node name="Body" type="CollisionShape3D" parent="." groups=["player"]]
+transform = Transform3D(1.03895, 0, 0, 0, 1.03895, 0, 0, 0, 1.03895, 0, 0.752544, 0)
+shape = SubResource("CapsuleShape3D_iof21")
+
+[node name="Face" type="CollisionShape3D" parent="." groups=["critical"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.41435, 0)
+shape = SubResource("CapsuleShape3D_dqkch")
+
+[node name="Head" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+
+[node name="Camera3D" type="Camera3D" parent="Head"]
+script = ExtResource("2_qlg0r")
+
+[node name="Node3D" parent="Head/Camera3D" instance=ExtResource("3_tuyoq")]
+transform = Transform3D(-0.359372, 0, -0.0622681, 0, 0.364726, 0, 0.0622681, 0, -0.359372, 0.331037, -0.232594, -0.228766)
+
+[node name="DunkelBlauWeaponsPackExportVersionCube" parent="Head/Camera3D/Node3D" index="0"]
+transform = Transform3D(0.991579, 0, -0.129505, 0, 1, 0, 0.129505, 0, 0.991579, 0.0694344, 0, 0.23481)
+
+[node name="Marker3D" parent="Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube" index="0"]
+script = null
+
+[node name="AimRay" type="RayCast3D" parent="Head/Camera3D"]
+transform = Transform3D(-0.364727, 0, 3.18854e-08, 0, 0.364726, 0, -3.18854e-08, 0, -0.364727, 0, 0, -0.983856)
+exclude_parent = false
+target_position = Vector3(0, -1, 100)
+collision_mask = 3
+debug_shape_custom_color = Color(0, 0.854902, 1, 1)
+
+[node name="AimRayEnd" type="Node3D" parent="Head/Camera3D"]
+transform = Transform3D(-0.364727, 0, 3.18854e-08, 0, 0.364726, 0, -3.18854e-08, 0, -0.364727, 0, 0, -101.5)
+
+[node name="RayOrigin" type="Node3D" parent="Head/Camera3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0, 0, -0.984)
+
+[node name="Shoot_Timer" type="Timer" parent="."]
+wait_time = 0.2
+one_shot = true
+
+[node name="UserInterface" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+
+[node name="Reticle" type="CenterContainer" parent="UserInterface"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -2.0
+offset_top = -9.0
+offset_right = 38.0
+offset_bottom = 31.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("4_fjrip")
+
+[connection signal="timeout" from="Shoot_Timer" to="." method="enable_shoot"]
+
+[editable path="Head/Camera3D/Node3D"]

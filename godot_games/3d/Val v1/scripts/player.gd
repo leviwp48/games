@@ -59,11 +59,26 @@ var is_moving : bool = false
 var new_bullet
 @onready var bullet_hole = preload("res://scenes/bullet_hole.tscn")
 @onready var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
+var bullet_trail = load("res://scenes/bullet_trail.tscn")
+@onready var aim_ray = $Head/Camera3D/AimRay
+@onready var aim_ray_end = $Head/Camera3D/AimRayEnd
+@onready var crosshair = $UserInterface/Reticle
+@onready var temp = $Head/Camera3D/RayOrigin
+
+@export var health: int = 100
+@export var armor: int = 50
+@export var credits: int = 8000
+@export var equipped: String = "pistol"
+var weapons = {
+	"pistol": 40
+}
 
 func _ready() -> void:
 	check_input_mappings()
 	look_rotation.y = rotation.y
 	look_rotation.x = head.rotation.x
+	crosshair.position.x = get_viewport().size.x / 2
+	crosshair.position.y = get_viewport().size.y / 2 
 
 func _unhandled_input(event: InputEvent) -> void:
 	# Mouse capturing
@@ -82,6 +97,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			enable_freefly()
 		else:
 			disable_freefly()
+
+
+func _process(delta: float) -> void:
+	if health <= 0:
+		death()
+
 
 func _physics_process(delta: float) -> void:
 	# If freeflying, handle freefly and nothing else
@@ -124,13 +145,14 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0
 		velocity.y = 0
 		is_moving = false
-	
-	# Use velocity to actually move
-	move_and_slide()
-	
+		
 	if Input.is_action_just_pressed("shoot"):
 		if shoot_timer.is_stopped():
 			shoot_bullet()
+	# Use velocity to actually move
+	move_and_slide()
+	
+
 
 
 ## Rotate us to look around.
@@ -166,50 +188,6 @@ func release_mouse():
 	mouse_captured = false
 
 
-func enable_shoot():
-	shoot_timer.stop()
-	
-
-#func test_decal(transform):
-	##const bullet_mark = preload("res://scenes/test.tscn")
-	##var b = bullet_mark.instantiate()
-	##var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
-	##marker.add_child(b)
-	#get_tree().root.add_child(b)
-	#print_tree_pretty()
-	#b.global_transform = transform
-	
-	
-func shoot_bullet():
-	print(is_moving)
-	new_bullet = bullet.instantiate()
-	marker.add_child(new_bullet)
-	if is_moving:
-		marker.recoil()	
-	else:
-		marker.reset()
-	new_bullet.global_transform = marker.global_transform
-	shoot_timer.start()
-  # In the receiving node's script
-	#var emitting_node = get_node("../Path/To/EmittingNode") # Adjust path as needed
-	if new_bullet:
-		new_bullet.hit_object.connect(_create_bullet_hole)
-	#func on_custom_signal_received(arg1, arg2):
-		## Handle the signal here
-		#print("Signal received with arguments: ", arg1, ", ", arg2)
-	#test_decal(new_bullet.global_transform)
-	
-
-func _create_bullet_hole(collision_position: Vector3, collision_normal: Vector3) -> void:
-	print('here')
-	var b = bullet_hole.instantiate()
-	get_tree().root.add_child(b)
-	#print_tree_pretty()
-	b.global_position = collision_position
-	#print(b.global_position)
-	b.look_at(collision_position + collision_normal, Vector3.UP)
-	
-	
 ## Checks if some Input Actions haven't been created.
 ## Disables functionality accordingly.
 func check_input_mappings():
@@ -234,3 +212,102 @@ func check_input_mappings():
 	if can_freefly and not InputMap.has_action(input_freefly):
 		push_error("Freefly disabled. No InputAction found for input_freefly: " + input_freefly)
 		can_freefly = false
+
+
+
+
+
+
+func enable_shoot():
+	shoot_timer.stop()
+	
+
+#func test_decal(transform):
+	##const bullet_mark = preload("res://scenes/test.tscn")
+	##var b = bullet_mark.instantiate()
+	##var marker = get_node("Head/Camera3D/Node3D/DunkelBlauWeaponsPackExportVersionCube/Marker3D")
+	##marker.add_child(b)
+	#get_tree().root.add_child(b)
+	#print_tree_pretty()
+	#b.global_transform = transform
+
+func recoil_reset() -> void:
+	aim_ray.transform.basis = temp.transform.basis
+	aim_ray_end.transform.basis = temp.transform.basis
+	#aim_ray.transform.basis = Basis()
+	#aim_ray.transform.basis = transform.basis.rotated(Vector3(0,1,0), 0)
+	#aim_ray_end.transform.basis = Basis()
+	#aim_ray_end.transform.basis = transform.basis.rotated(Vector3(0,1,0), 0)
+
+func recoil() -> void:
+	var rot_x = randf_range(-0.1, 0.1)
+	var rot_y = randf_range(-0.1, 0.1)
+	#transform.basis = Basis() # reset rotation
+	aim_ray.rotate_object_local(Vector3(0, 1, 0), rot_x) # first rotate in Y
+	aim_ray.rotate_object_local(Vector3(1, 0, 0), rot_y) # then rotate in X
+	aim_ray_end.rotate_object_local(Vector3(0, 1, 0), rot_x) # first rotate in Y
+	aim_ray_end.rotate_object_local(Vector3(1, 0, 0), rot_y) # then rotate in X
+
+
+func shoot_bullet():
+	if is_moving:
+		recoil()
+	else:
+		recoil_reset()
+	shoot_timer.start()
+	var b_trail_inst = bullet_trail.instantiate()
+	if aim_ray.is_colliding():
+		var index = aim_ray.get_collider_shape()
+		var hit_obj = aim_ray.get_collider()
+		var hit_obj_name = aim_ray.get_collider().shape_owner_get_owner(index).name
+		print(hit_obj_name)
+		b_trail_inst.init(marker.global_position, aim_ray.get_collision_point())
+		if hit_obj.is_in_group("environment"):
+			create_bullet_hole(aim_ray.get_collision_point())
+		elif hit_obj.is_in_group("player"):
+			if hit_obj_name == "Face":
+				hit_obj.take_damage(weapons[equipped] * 1.5) 
+			else:
+				hit_obj.take_damage(weapons[equipped])
+			print(hit_obj.health)
+	else:
+		b_trail_inst.init(marker.global_position, aim_ray_end.global_position)
+	get_parent().add_child(b_trail_inst)
+	#marker.add_child(new_bullet)
+	
+	#new_bullet.global_transform = marker.global_transform
+  # In the receiving node's script
+	#var emitting_node = get_node("../Path/To/EmittingNode") # Adjust path as needed
+	#if new_bullet:
+		#new_bullet.hit_object.connect(_create_bullet_hole)
+		#var b_trail = bullet_trail.instantiate()
+		#b_trail.init(marker.global_position, )
+	#func on_custom_signal_received(arg1, arg2):
+		## Handle the signal here
+		#print("Signal received with arguments: ", arg1, ", ", arg2)
+	#test_decal(new_bullet.global_transform)
+	
+func create_bullet_hole(collision_position: Vector3) -> void:
+	var b = bullet_hole.instantiate()
+	get_tree().root.add_child(b)
+	b.global_position = collision_position
+	b.look_at(collision_position, Vector3.UP)
+
+# probs delete this
+func _create_bullet_hole(collision_position: Vector3, collision_normal: Vector3) -> void:
+	#print('here')
+	var b = bullet_hole.instantiate()
+	get_tree().root.add_child(b)
+	#print_tree_pretty()
+	b.global_position = collision_position
+	#print(b.global_position)
+	b.look_at(collision_position + collision_normal, Vector3.UP)
+
+
+func take_damage(amount: int) -> void: 
+	health -= amount
+	print(health)	
+	
+
+func death() -> void:
+	queue_free()

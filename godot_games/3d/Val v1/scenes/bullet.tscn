@@ -14,10 +14,11 @@ script/source = "extends CollisionShape3D
 [node name="Bullet" type="RayCast3D"]
 top_level = true
 exclude_parent = false
+target_position = Vector3(0, -1, 100)
 collision_mask = 2
 hit_from_inside = true
 collide_with_areas = true
-debug_shape_custom_color = Color(0.882353, 0, 0, 1)
+debug_shape_custom_color = Color(0.168626, 0.465862, 0.829663, 1)
 debug_shape_thickness = 5
 script = ExtResource("1_y25gk")
 speed = 80.0
