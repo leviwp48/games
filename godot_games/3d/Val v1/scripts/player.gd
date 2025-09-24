@@ -5,6 +5,8 @@
 
 extends CharacterBody3D
 
+signal changed_health(health_value)
+
 ## Can we move around?
 @export var can_move : bool = true
 ## Are we affected by gravity?
@@ -12,7 +14,7 @@ extends CharacterBody3D
 ## Can we press to jump?
 @export var can_jump : bool = true
 ## Can we hold to run?
-@export var can_sprint : bool = false
+#@export var can_sprint : bool = false
 ## Can we press to enter freefly mode (noclip)?
 @export var can_freefly : bool = false
 
@@ -24,9 +26,17 @@ extends CharacterBody3D
 ## Speed of jump.
 @export var jump_velocity : float = 3.5
 ## How fast do we run?
-@export var sprint_speed : float = 10.0
+@export var walk_speed : float = 4.0
 ## How fast do we freefly?
 @export var freefly_speed : float = 25.0
+
+@export_group("Stats")
+@export var health: int = 100
+@export var armor: int = 50
+@export var credits: int = 8000
+@export var equipped: String = "pistol"
+@export var primary_weapon: String
+@export var secondary_weapon: String
 
 @export_group("Input Actions")
 ## Name of Input Action to move Left.
@@ -39,10 +49,11 @@ extends CharacterBody3D
 @export var input_back : String = "down"
 ## Name of Input Action to Jump.
 @export var input_jump : String = "jump"
-## Name of Input Action to Sprint.
-@export var input_sprint : String = "sprint"
+## Name of Input Action to Walk.
+@export var input_walk: String = "walk"
 ## Name of Input Action to toggle freefly mode.
 @export var input_freefly : String = "freefly"
+@export var input_shop : String = "shop"
 
 var mouse_captured : bool = false
 var look_rotation : Vector2
@@ -64,16 +75,24 @@ var bullet_trail = load("res://scenes/bullet_trail.tscn")
 @onready var aim_ray_end = $Head/Camera3D/AimRayEnd
 @onready var crosshair = $UserInterface/Reticle
 @onready var temp = $Head/Camera3D/RayOrigin
+@onready var cam = $Head/Camera3D
 
-@export var health: int = 100
-@export var armor: int = 50
-@export var credits: int = 8000
-@export var equipped: String = "pistol"
+
 var weapons = {
-	"pistol": 40
+	"pistol": 15,
+	"shotgun": 10,
+	"rifle": 30,
+	"sniper": 70
 }
 
+func _enter_tree() -> void:
+	set_multiplayer_authority(str(name).to_int())
+	
+	
 func _ready() -> void:
+	if not is_multiplayer_authority(): return 
+	cam.current = true 
+	
 	check_input_mappings()
 	look_rotation.y = rotation.y
 	look_rotation.x = head.rotation.x
@@ -81,6 +100,7 @@ func _ready() -> void:
 	crosshair.position.y = get_viewport().size.y / 2 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if not is_multiplayer_authority(): return 
 	# Mouse capturing
 	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
 		capture_mouse()
@@ -100,11 +120,17 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func _process(delta: float) -> void:
+	if not is_multiplayer_authority(): return 
 	if health <= 0:
 		death()
+	
+	if Input.is_action_just_pressed(input_shop):
+		print('shop')
+		get_parent().toggle_shop()
 
 
 func _physics_process(delta: float) -> void:
+	if not is_multiplayer_authority(): return 
 	# If freeflying, handle freefly and nothing else
 	if can_freefly and freeflying:
 		var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
@@ -123,12 +149,18 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_pressed(input_jump) and is_on_floor():
 			velocity.y = jump_velocity
 
-	# Modify speed based on sprinting
-	if can_sprint and Input.is_action_pressed(input_sprint):
-			move_speed = sprint_speed
+	## Modify speed based on sprinting
+	#if can_sprint and Input.is_action_pressed(input_sprint):
+			#move_speed = sprint_speed
+	#else:
+		#move_speed = base_speed
+	
+	# Modify speed based on walking
+	if Input.is_action_pressed(input_walk):
+		move_speed = walk_speed
 	else:
 		move_speed = base_speed
-
+		
 	# Apply desired movement to velocity
 	if can_move:
 		var input_dir := Input.get_vector(input_left, input_right, input_forward, input_back)
@@ -145,10 +177,17 @@ func _physics_process(delta: float) -> void:
 		velocity.x = 0
 		velocity.y = 0
 		is_moving = false
-		
-	if Input.is_action_just_pressed("shoot"):
-		if shoot_timer.is_stopped():
-			shoot_bullet()
+	
+	if equipped == "pistol" or equipped == "sniper":
+		if Input.is_action_just_pressed("shoot"):
+			if shoot_timer.is_stopped():
+				shoot_bullet.rpc()
+	# might want to move this code to the guns themselves and have them inject the timer to the player
+	elif equipped == "rifle":
+		if Input.is_action_pressed("shoot"):
+			if shoot_timer.is_stopped():
+				shoot_bullet.rpc()
+	
 	# Use velocity to actually move
 	move_and_slide()
 	
@@ -206,16 +245,12 @@ func check_input_mappings():
 	if can_jump and not InputMap.has_action(input_jump):
 		push_error("Jumping disabled. No InputAction found for input_jump: " + input_jump)
 		can_jump = false
-	if can_sprint and not InputMap.has_action(input_sprint):
-		push_error("Sprinting disabled. No InputAction found for input_sprint: " + input_sprint)
-		can_sprint = false
+	#if can_sprint and not InputMap.has_action(input_sprint):
+		#push_error("Sprinting disabled. No InputAction found for input_sprint: " + input_sprint)
+		#can_sprint = false
 	if can_freefly and not InputMap.has_action(input_freefly):
 		push_error("Freefly disabled. No InputAction found for input_freefly: " + input_freefly)
 		can_freefly = false
-
-
-
-
 
 
 func enable_shoot():
@@ -248,13 +283,19 @@ func recoil() -> void:
 	aim_ray_end.rotate_object_local(Vector3(0, 1, 0), rot_x) # first rotate in Y
 	aim_ray_end.rotate_object_local(Vector3(1, 0, 0), rot_y) # then rotate in X
 
-
+@rpc("call_local")
 func shoot_bullet():
 	if is_moving:
 		recoil()
 	else:
 		recoil_reset()
-	shoot_timer.start()
+	if equipped == "pistol":
+		shoot_timer.start(0.2)
+	elif equipped == "rifle":
+		shoot_timer.start(0.1)
+	elif equipped == "sniper":
+		shoot_timer.start(0.6)
+
 	var b_trail_inst = bullet_trail.instantiate()
 	if aim_ray.is_colliding():
 		var index = aim_ray.get_collider_shape()
@@ -266,9 +307,9 @@ func shoot_bullet():
 			create_bullet_hole(aim_ray.get_collision_point())
 		elif hit_obj.is_in_group("player"):
 			if hit_obj_name == "Face":
-				hit_obj.take_damage(weapons[equipped] * 1.5) 
+				hit_obj.take_damage.rpc_id(hit_obj.get_multiplayer_authority(), weapons[equipped] * 1.5)
 			else:
-				hit_obj.take_damage(weapons[equipped])
+				hit_obj.take_damage.rpc_id(hit_obj.get_multiplayer_authority(), weapons[equipped])
 			print(hit_obj.health)
 	else:
 		b_trail_inst.init(marker.global_position, aim_ray_end.global_position)
@@ -303,11 +344,16 @@ func _create_bullet_hole(collision_position: Vector3, collision_normal: Vector3)
 	#print(b.global_position)
 	b.look_at(collision_position + collision_normal, Vector3.UP)
 
-
+@rpc("any_peer")
 func take_damage(amount: int) -> void: 
 	health -= amount
 	print(health)	
+	changed_health.emit(health)
+	if health <= 0:
+		get_parent().respawn(multiplayer.get_unique_id())
 	
 
 func death() -> void:
-	queue_free()
+	pass
+	#var spawn_point = get_parent().get_child(4).get_child(0)
+	#position = spawn_point.position

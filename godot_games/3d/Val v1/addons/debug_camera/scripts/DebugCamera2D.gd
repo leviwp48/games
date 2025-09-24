@@ -58,4 +58,3 @@ func _unhandled_input(event: InputEvent) -> void:
 			var cam := main_cam
 			cam.enabled = !cam.enabled
 			enabled = !cam.enabled
-
