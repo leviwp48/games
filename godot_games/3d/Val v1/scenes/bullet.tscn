@@ -21,7 +21,6 @@ collide_with_areas = true
 debug_shape_custom_color = Color(0.168626, 0.465862, 0.829663, 1)
 debug_shape_thickness = 5
 script = ExtResource("1_y25gk")
-speed = 80.0
 
 [node name="bullet" parent="." instance=ExtResource("1_mkf8s")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.00836289, 0.00730443, 0.0129206)

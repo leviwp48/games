@@ -4,12 +4,11 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://dmgvma3hh1q00"
-path="res://.godot/imported/DunkelBlau Weapons Pack ExportVersion.blend-5e0ce7b615ec5a1035aac1a484fe9658.scn"
+valid=false
 
 [deps]
 
 source_file="res://assets/models/guns/pistol/DunkelBlau Weapons Pack ExportVersion.blend"
-dest_files=["res://.godot/imported/DunkelBlau Weapons Pack ExportVersion.blend-5e0ce7b615ec5a1035aac1a484fe9658.scn"]
 
 [params]
 

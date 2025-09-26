@@ -10,16 +10,17 @@ extends Node3D
 @onready var equip_pistol = $PanelContainer/HBoxContainer/VBoxContainer/EquipPistol
 @onready var equip_rifle = $PanelContainer/HBoxContainer/VBoxContainer/EquipRifle
 @onready var equip_sniper = $PanelContainer/HBoxContainer/VBoxContainer/EquipSniper
-
+@onready var game_timer = $GameTimer
 const PORT = 9999
 var enet_peer = ENetMultiplayerPeer.new()
+var game_score = [0, 0]
+var player_scores = {}
 
 #
 #func _ready() -> void:
 	#var p1 = player.instantiate()
 	#add_child(p1)
 	#p1.position = spawn_point.position
-
 
 
 func add_player(peer_id) -> void:
@@ -32,6 +33,8 @@ func add_player(peer_id) -> void:
 		print('adding health bar')
 		player.changed_health.connect(update_health_bar)
 	print('player added')
+	player_scores[peer_id] = {"kills": 0, "deaths": 0}
+	print(player_scores)
 
 
 func remove_player(peer_id) -> void: 
@@ -50,6 +53,8 @@ func respawn(peer_id) -> void:
 	player.health = 100
 	player.position = spawn_point.position
 	update_health_bar(player.health)
+	add_kill(peer_id)
+
 
 
 func toggle_shop() -> void:
@@ -58,6 +63,17 @@ func toggle_shop() -> void:
 	else:
 		shop.show()
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+		
+
+@rpc("any_peer")
+func add_kill(id) -> void:
+	print('here 1')
+	print(player_scores)
+	player_scores[id]["kills"] += 1
+	print('here 2')
+	print(player_scores)
+
+	
 
 func _on_host_button_pressed() -> void:
 	main_menu.hide()
@@ -125,3 +141,10 @@ func _on_equip_sniper_pressed() -> void:
 	print(player.equipped)
 	print(player.credits)
 	
+
+func _on_start_game_pressed() -> void:
+	game_timer.start(10.0)
+
+
+func _on_game_timer_timeout() -> void:
+	print("game ended!")

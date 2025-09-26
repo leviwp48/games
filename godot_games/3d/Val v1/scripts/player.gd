@@ -79,6 +79,8 @@ var bullet_trail = load("res://scenes/bullet_trail.tscn")
 @onready var cam = $Head/Camera3D
 @onready var sound_radius = $Area3D/CollisionShape3D
 
+var incoming_damage_tracker = {}
+var peer_id = null
 
 var weapons = {
 	"pistol": 15,
@@ -351,11 +353,23 @@ func _create_bullet_hole(collision_position: Vector3, collision_normal: Vector3)
 
 @rpc("any_peer")
 func take_damage(amount: int) -> void: 
+	if not peer_id:
+		peer_id = multiplayer.get_unique_id()
 	health -= amount
 	print(health)	
 	changed_health.emit(health)
 	if health <= 0:
-		get_parent().respawn(multiplayer.get_unique_id())
+		for id in incoming_damage_tracker:
+			#get_parent().add_kill(id)
+			get_parent().respawn(peer_id)
+	
+	if incoming_damage_tracker.has(peer_id):
+		var curr_damage_stats = incoming_damage_tracker[peer_id]
+		curr_damage_stats["hits"] += 1 
+		curr_damage_stats["damage"] += amount
+		incoming_damage_tracker[peer_id] = curr_damage_stats
+	else:
+		incoming_damage_tracker[peer_id] = {"hits": 0, "damage": 0}
 	
 
 func death() -> void:

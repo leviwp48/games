@@ -152,6 +152,9 @@ text = "Rifle"
 layout_mode = 2
 text = "Sniper"
 
+[node name="StartGame" type="Button" parent="CanvasLayer/Shop/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+
 [node name="Level1" parent="." instance=ExtResource("3_sugp2")]
 
 [node name="SpawnPoint" parent="Level1" index="0"]
@@ -628,11 +631,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11.3226, 0.0522776, -0.86707
 [node name="Chest" parent="Level1" index="9"]
 transform = Transform3D(0.99956, 0, -0.0296487, 0, 1, 0, 0.0296487, 0, 0.99956, -14.1628, 0.0522778, -2.73657)
 
+[node name="GameTimer" type="Timer" parent="."]
+
 [connection signal="spawned" from="MultiplayerSpawner" to="." method="_on_multiplayer_spawner_spawned"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/HostButton" to="." method="_on_host_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/MainMenu/MarginContainer/VBoxContainer/JoinButton" to="." method="_on_join_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Shop/HBoxContainer/VBoxContainer/EquipPistol" to="." method="_on_equip_pistol_pressed"]
 [connection signal="pressed" from="CanvasLayer/Shop/HBoxContainer/VBoxContainer/EquipRifle" to="." method="_on_equip_rifle_pressed"]
 [connection signal="pressed" from="CanvasLayer/Shop/HBoxContainer/VBoxContainer/EquipSniper" to="." method="_on_equip_sniper_pressed"]
+[connection signal="pressed" from="CanvasLayer/Shop/HBoxContainer/VBoxContainer/StartGame" to="." method="_on_start_game_pressed"]
+[connection signal="timeout" from="GameTimer" to="." method="_on_game_timer_timeout"]
 
 [editable path="Level1"]
