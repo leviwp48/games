@@ -37,6 +37,7 @@ signal changed_health(health_value)
 @export var equipped: String = "pistol"
 @export var primary_weapon: String
 @export var secondary_weapon: String
+@export var sound_range: int = 30
 
 @export_group("Input Actions")
 ## Name of Input Action to move Left.
@@ -76,6 +77,7 @@ var bullet_trail = load("res://scenes/bullet_trail.tscn")
 @onready var crosshair = $UserInterface/Reticle
 @onready var temp = $Head/Camera3D/RayOrigin
 @onready var cam = $Head/Camera3D
+@onready var sound_radius = $Area3D/CollisionShape3D
 
 
 var weapons = {
@@ -90,6 +92,7 @@ func _enter_tree() -> void:
 	
 	
 func _ready() -> void:
+	print('just spawned')
 	if not is_multiplayer_authority(): return 
 	cam.current = true 
 	
@@ -289,13 +292,15 @@ func shoot_bullet():
 		recoil()
 	else:
 		recoil_reset()
+		
 	if equipped == "pistol":
 		shoot_timer.start(0.2)
 	elif equipped == "rifle":
 		shoot_timer.start(0.1)
 	elif equipped == "sniper":
 		shoot_timer.start(0.6)
-
+	
+	
 	var b_trail_inst = bullet_trail.instantiate()
 	if aim_ray.is_colliding():
 		var index = aim_ray.get_collider_shape()
@@ -357,3 +362,4 @@ func death() -> void:
 	pass
 	#var spawn_point = get_parent().get_child(4).get_child(0)
 	#position = spawn_point.position
+	

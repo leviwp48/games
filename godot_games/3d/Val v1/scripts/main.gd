@@ -25,9 +25,11 @@ var enet_peer = ENetMultiplayerPeer.new()
 func add_player(peer_id) -> void:
 	var player = player_scene.instantiate()
 	player.name = str(peer_id)
+	print(player.name)
 	add_child(player)
 	player.position = spawn_point.position
 	if player.is_multiplayer_authority():
+		print('adding health bar')
 		player.changed_health.connect(update_health_bar)
 	print('player added')
 
@@ -64,15 +66,22 @@ func _on_host_button_pressed() -> void:
 	multiplayer.multiplayer_peer = enet_peer
 	multiplayer.peer_connected.connect(add_player)
 	multiplayer.peer_disconnected.connect(remove_player)
+	
 	add_player(multiplayer.get_unique_id())
+
 	upnp_setup()
 
 
 func _on_join_button_pressed() -> void:
 	main_menu.hide()
 	hud.show()
-	enet_peer.create_client(address_entry.text, PORT)
+	print(address_entry.text)
+	# NEED TO FIX THIS LATER IT DOESN"T LIKE THE adress for some reason 
+	#enet_peer.create_client(address_entry.text, PORT)
+	enet_peer.create_client('localhost', PORT)
 	multiplayer.multiplayer_peer = enet_peer
+	#add_player(multiplayer.get_unique_id())
+	print(multiplayer.multiplayer_peer)
 
 
 func _on_multiplayer_spawner_spawned(node: Node) -> void:
@@ -98,17 +107,21 @@ func upnp_setup():
 func _on_equip_pistol_pressed() -> void:
 	var player = get_node_or_null(str(multiplayer.get_unique_id()))
 	player.equipped = "pistol"
-	print(player.equipped)
+	player.credits = player.credits - 400
+	print(player.credits)
 
 
 func _on_equip_rifle_pressed() -> void:
 	var player = get_node_or_null(str(multiplayer.get_unique_id()))
 	player.equipped = "rifle"
-	print(player.equipped)
+	player.credits = player.credits - 2900
+	print(player.credits)
 
 
 func _on_equip_sniper_pressed() -> void:
 	var player = get_node_or_null(str(multiplayer.get_unique_id()))
 	player.equipped = "sniper"
+	player.credits = player.credits - 3600
 	print(player.equipped)
+	print(player.credits)
 	
